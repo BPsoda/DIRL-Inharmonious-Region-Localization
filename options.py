@@ -2,6 +2,8 @@ import argparse
 
 def ArgsParser():
         parser = argparse.ArgumentParser()
+        # Model
+        parser.add_argument('--model', type=str, default="dirl", help='The model you are going to apply: e.g. unet or dirl')
         # Datasets
         parser.add_argument('--dataset_root', type=str, default="/media/sda/datasets/IHD", help='frequency of showing training results on screen')
         parser.add_argument('--name', type=str, default='', help='name of the experiment. It decides where to store samples and models')

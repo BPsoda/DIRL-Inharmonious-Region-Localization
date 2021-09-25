@@ -18,7 +18,7 @@ import cv2
 import multiprocessing as mp
 
 
-from model import InharmoniousDecoder, InharmoniousEncoder
+from model import InharmoniousDecoder, InharmoniousEncoder, UnetEncoder, UnetDecoder
 from evaluation.metrics import FScore, normPRED, compute_mAP, compute_IoU
 
 
@@ -102,8 +102,12 @@ class Trainer(object):
         self.best_acc = 0
         
         # ------- 3. define model --------
-        self.encoder = InharmoniousEncoder(opt, opt.input_nc)
-        self.decoder = InharmoniousDecoder(opt, opt.input_nc)
+        if self.opt.model == "unet":
+            self.encoder = UnetEncoder
+            self.decoder = UnetDecoder
+        else:
+            self.encoder = InharmoniousEncoder(opt, opt.input_nc)
+            self.decoder = InharmoniousDecoder(opt, opt.input_nc)
         
         encoder_size = sum(p.numel() for p in self.encoder.parameters())/1e6
         decoder_size = sum(p.numel() for p in self.decoder.parameters())/1e6
@@ -304,8 +308,12 @@ class Trainer(object):
         z_inharm = self.encoder(inharmonious)
         z_harm = self.encoder(harmonious)
         
-        inharmonious_outs =self.decoder(z_inharm)
-        harmonious_outs =self.decoder(z_harm)
+        if self.opt.model == 'unet':
+            inharmonious_outs =self.decoder(z_inharm, inharmonious)
+            harmonious_outs =self.decoder(z_harm, harmonious)
+        else:
+            inharmonious_outs =self.decoder(z_inharm)
+            harmonious_outs =self.decoder(z_harm)
 
         inharmonious_pred = inharmonious_outs['mask']
         harmonious_pred = harmonious_outs['mask']
