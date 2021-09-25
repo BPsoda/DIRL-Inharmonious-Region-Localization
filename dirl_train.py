@@ -103,8 +103,8 @@ class Trainer(object):
         
         # ------- 3. define model --------
         if self.opt.model == "unet":
-            self.encoder = UnetEncoder
-            self.decoder = UnetDecoder
+            self.encoder = UnetEncoder()
+            self.decoder = UnetDecoder()
         else:
             self.encoder = InharmoniousEncoder(opt, opt.input_nc)
             self.decoder = InharmoniousDecoder(opt, opt.input_nc)

@@ -142,7 +142,7 @@ class UNet(nn.Module):
 
 class UnetEncoder(nn.Module):
     def __init__(self, in_ch=3, n_class=1, nf=64, n_downs=4, backbone='none'):
-        super(UNet, self).__init__()
+        super(UnetEncoder, self).__init__()
         if backbone == 'none':
             self.in_conv = DoubleConv(in_ch, nf)
         elif 'resnet' in backbone:
@@ -209,7 +209,7 @@ class UnetEncoder(nn.Module):
 
 class UnetDecoder(nn.Module):
     def __init__(self, in_ch=3, n_class=1, nf=64, n_downs=4, backbone='none'):
-        super(UNet, self).__init__()
+        super(UnetDecoder, self).__init__()
         
 
         self.downs = nn.ModuleDict()
